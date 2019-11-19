@@ -13,6 +13,7 @@
         <Button fx:id="btn" onAction="#drawNode" text="draw node" GridPane.rowIndex="0"/>
         <Button fx:id="btn_2" onAction="#drawLine" text="draw line" GridPane.rowIndex="1"/>
         <Button fx:id="clear_btn" onAction="#clearCanvas" text="clear" GridPane.rowIndex="2"/>
-        <Button fx:id="start" text="choose starting node" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        <Button fx:id="start_btn" onAction="#selectStart" text="choose starting node" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        <Button fx:id="bfs_btn" text="Breadth first search" onAction="#bfs" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
     </GridPane>
 </GridPane>
