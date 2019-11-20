@@ -23,6 +23,7 @@ public class Controller {
     public Text drawingText;
     public Button bfs_btn;
     public Button start_btn;
+    public Button end_btn;
 
 
     @FXML
@@ -35,7 +36,7 @@ public class Controller {
             new Node(mainCanvas.getGraphicsContext2D(),e.getX(),e.getY());
         });
         drawingText.setText("Currently drawing : ");
-        drawingText.setText(drawingText.getText() + " drawing node" );
+        drawingText.setText(drawingText.getText() + " node" );
     }
 
     @FXML
@@ -72,7 +73,7 @@ public class Controller {
             });
 
         drawingText.setText("Currently drawing : ");
-        drawingText.setText(drawingText.getText() + " drawing line" );
+        drawingText.setText(drawingText.getText() + " line" );
     }
 
     @FXML
@@ -85,7 +86,7 @@ public class Controller {
         mainCanvas.getGraphicsContext2D().clearRect(0,0,mainCanvas.getWidth(),mainCanvas.getHeight());
 
         drawingText.setText("Currently drawing : ");
-        drawingText.setText(drawingText.getText() + " drawing nothing" );
+        drawingText.setText(drawingText.getText() + " nothing" );
     }
 
     @FXML
@@ -104,11 +105,24 @@ public class Controller {
     }
 
     @FXML
+    void selectEnd(){
+        mainCanvas.setOnMouseClicked(e->{});
+        GraphicsContext ctx = mainCanvas.getGraphicsContext2D();
+        mainCanvas.setOnMouseClicked(e ->{
+            for(Node x : Node.nodes){
+                if((e.getX() >= x.xCord - x.RADIUS && e.getX() <= x.xCord)&& (e.getY() >= x.yCord - x.RADIUS&& e.getY() <= x.yCord)){
+                    end = x;
+                    end_btn.setDisable(true);
+                    x.reDraw(ctx,Color.GREEN);
+                }}
+        });
+    }
+
+    @FXML
     void bfs(){
         PriorityQueue<Node> queue = new PriorityQueue<>();
         int counter = 0;
         ArrayList<Node> notVisitedNodes = new ArrayList<>();
-        end = Node.nodes.get(4);
 
         for(Node x : Node.nodes){
             if(x.isVisited == false) notVisitedNodes.add(x);
