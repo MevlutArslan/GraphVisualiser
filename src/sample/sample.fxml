@@ -12,6 +12,7 @@
         <Button fx:id="start_btn" onAction="#selectStart" text="select start node" GridPane.rowIndex="3"/>
         <Button fx:id="end_btn" onAction="#selectEnd" text="select end node" GridPane.rowIndex="4"/>
         <Button fx:id="bfs_btn" text="Breadth first search" onAction="#bfs" GridPane.rowIndex="5"/>
+        <Button fx:id="dfs_btn" text="Depth first search" onAction="#runDfs" GridPane.rowIndex="6"/>
 
     </GridPane>
     <Text fx:id="drawingText" text="Currently drawing : " GridPane.columnIndex="1" GridPane.rowIndex="0" ></Text>

@@ -11,6 +11,7 @@ import javafx.scene.text.Text;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.PriorityQueue;
+import java.util.Stack;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Controller {
@@ -87,6 +88,9 @@ public class Controller {
 
         drawingText.setText("Currently drawing : ");
         drawingText.setText(drawingText.getText() + " nothing" );
+        end_btn.setDisable(false);
+        start_btn.setDisable(false);
+
     }
 
     @FXML
@@ -121,44 +125,84 @@ public class Controller {
     @FXML
     void bfs(){
         PriorityQueue<Node> queue = new PriorityQueue<>();
-        int counter = 0;
         ArrayList<Node> notVisitedNodes = new ArrayList<>();
-
+        GraphicsContext ctx = mainCanvas.getGraphicsContext2D();
         for(Node x : Node.nodes){
             if(x.isVisited == false) notVisitedNodes.add(x);
         }
 
-        start.setVisited(true);
-        queue.offer(start);
-        while (queue.size() > 0){
-            Node curr = queue.poll(); //gets the 1st element from que;
+        Thread thread = new Thread(){
+            public void run(){
 
-            //end condition
-            if(curr == end){
-                break;
+                start.setVisited(true);
+                queue.offer(start);
+                while (queue.size() > 0){
+                    Node curr = queue.poll(); //gets the 1st element from que;
+
+                    //end condition
+                    if(curr == end){
+                        break;
+                    }
+                    for(Node x : curr.connectedNodes){
+                        if(x.isVisited() == false){
+                            x.setVisited(true);
+                            x.parent = curr;
+                            try {
+                                queue.offer(x);
+                                x.reDraw(ctx,Color.DARKCYAN);
+                                Thread.sleep(50);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }
+                }
+
+
+                ArrayList<Node> path = new ArrayList<>();
+                path.add(end);
+                Node next = end.parent;
+                while(next != null){
+                    path.add(next);
+                    next= next.parent;
+                }
+
+                for(Node x : path){
+                    x.reDraw(ctx,Color.ORANGE);
+                }
+
             }
-            for(Node x : curr.connectedNodes){
-               if(x.isVisited() == false){
-                   x.setVisited(true);
-                   x.parent = curr;
-                   queue.offer(x);
-                   counter ++;
-               }
+        };
+        thread.start();
+
+    }
+
+    @FXML
+    void dfs(Node n){
+        Thread thread = new Thread(){
+            public void run(){
+                GraphicsContext ctx = mainCanvas.getGraphicsContext2D();
+                n.setVisited(true);
+                for(Node x : n.connectedNodes){
+                    if(x.isVisited == false){
+                        dfs(x);
+                        try {
+                            x.reDraw(ctx,Color.PINK);
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
             }
-        }
+        };
+        thread.start();
+    }
 
-        ArrayList<Node> path = new ArrayList<>();
-        path.add(end);
-        Node next = end.parent;
-        while(next != null){
-            path.add(next);
-            next= next.parent;
-        }
-
-        GraphicsContext ctx = mainCanvas.getGraphicsContext2D();
-        for(Node x : path){
-            x.reDraw(ctx,Color.ORANGE);
-        }
+    @FXML
+    void runDfs(){
+        dfs(start);
     }
 }
 
