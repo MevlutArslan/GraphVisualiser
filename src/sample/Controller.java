@@ -140,7 +140,8 @@ public class Controller {
                 start.setVisited(true);
                 queue.offer(start);
                 while (queue.size() > 0){
-                    Node curr = queue.poll(); //gets the 1st element from que;
+                    //gets the 1st element from que
+                    Node curr = queue.poll();
 
                     //end condition
                     if(curr == end){
