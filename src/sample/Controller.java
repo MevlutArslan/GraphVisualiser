@@ -8,16 +8,19 @@ import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.PriorityQueue;
-import java.util.Stack;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Controller {
 
     Node start;
     Node end;
+    final Color STARTCIRCLE = Color.PURPLE;
+    final Color ENDCIRCLE = Color.GREEN;
+    final Color DRAWCIRCLE = Color.LIGHTBLUE;
+    final Color DRAWEDGE = Color.RED;
+    final Color TRAVERSE = Color.DARKCYAN;
+    final Color PATHCOLOR = Color.ORANGE;
 
     public Canvas mainCanvas;
     public Button btn;
@@ -47,14 +50,14 @@ public class Controller {
             boolean isSelected = false;
             Node currentNode = null;
             for( Node x : Node.nodes){
-                ctx.setFill(Color.LIGHTBLUE);
+                ctx.setFill(DRAWEDGE);
                 ctx.fillOval(x.xCord-x.RADIUS,x.yCord-x.RADIUS,x.DIAMETER,x.DIAMETER);
                 //checking mouse location and comparing it to all the nodes in the canvas
                 if((e.getX() >= x.xCord - x.RADIUS && e.getX() <= x.xCord)&& (e.getY() >= x.yCord - x.RADIUS&& e.getY() <= x.yCord)) {
                     //if the mouse is clicked at the location of a node we mark it as currentNode and then redraw it in RED to indicate its chosen
                     isSelected = true;
                     currentNode = x;
-                    x.reDraw(ctx,Color.RED);
+                    x.reDraw(ctx,DRAWEDGE);
                 }
             }
                 //after making sure a node is selected then we use the currentNode to draw a line from its center to the second selected Node
@@ -102,7 +105,7 @@ public class Controller {
                 if((e.getX() >= x.xCord - x.RADIUS && e.getX() <= x.xCord)&& (e.getY() >= x.yCord - x.RADIUS&& e.getY() <= x.yCord)){
                     start = x;
                     start_btn.setDisable(true);
-                    x.reDraw(ctx,Color.PURPLE);
+                    x.reDraw(ctx,STARTCIRCLE);
             }}
         });
 
@@ -117,7 +120,7 @@ public class Controller {
                 if((e.getX() >= x.xCord - x.RADIUS && e.getX() <= x.xCord)&& (e.getY() >= x.yCord - x.RADIUS&& e.getY() <= x.yCord)){
                     end = x;
                     end_btn.setDisable(true);
-                    x.reDraw(ctx,Color.GREEN);
+                    x.reDraw(ctx,ENDCIRCLE);
                 }}
         });
     }
@@ -149,8 +152,8 @@ public class Controller {
                             x.parent = curr;
                             try {
                                 queue.offer(x);
-                                x.reDraw(ctx,Color.DARKCYAN);
-                                Thread.sleep(50);
+                                x.reDraw(ctx,TRAVERSE);
+                                Thread.sleep(100);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -169,7 +172,7 @@ public class Controller {
                 }
 
                 for(Node x : path){
-                    x.reDraw(ctx,Color.ORANGE);
+                    x.reDraw(ctx,PATHCOLOR);
                 }
 
             }
@@ -186,10 +189,10 @@ public class Controller {
                 n.setVisited(true);
                 for(Node x : n.connectedNodes){
                     if(x.isVisited == false){
-                        dfs(x);
                         try {
-                            x.reDraw(ctx,Color.PINK);
-                            Thread.sleep(100);
+                            dfs(x);
+                            x.reDraw(ctx,TRAVERSE);
+                            Thread.sleep(500);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
