@@ -50,7 +50,7 @@ public class Controller {
             boolean isSelected = false;
             Node currentNode = null;
             for( Node x : Node.nodes){
-                ctx.setFill(DRAWEDGE);
+                ctx.setFill(DRAWCIRCLE);
                 ctx.fillOval(x.xCord-x.RADIUS,x.yCord-x.RADIUS,x.DIAMETER,x.DIAMETER);
                 //checking mouse location and comparing it to all the nodes in the canvas
                 if((e.getX() >= x.xCord - x.RADIUS && e.getX() <= x.xCord)&& (e.getY() >= x.yCord - x.RADIUS&& e.getY() <= x.yCord)) {
