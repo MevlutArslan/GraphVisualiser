@@ -1,10 +1,12 @@
 package sample;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
@@ -34,6 +36,10 @@ public class Controller {
     void run(){
 
     }
+
+    private boolean mouseInBounds(MouseEvent e, Node x){
+        return (e.getX() >= x.xCord - x.RADIUS && e.getX() <= x.xCord)&& (e.getY() >= x.yCord - x.RADIUS&& e.getY() <= x.yCord);
+    }
     @FXML
     void drawNode(){
         mainCanvas.setOnMouseClicked(e -> {
@@ -53,7 +59,7 @@ public class Controller {
                 ctx.setFill(DRAWCIRCLE);
                 ctx.fillOval(x.xCord-x.RADIUS,x.yCord-x.RADIUS,x.DIAMETER,x.DIAMETER);
                 //checking mouse location and comparing it to all the nodes in the canvas
-                if((e.getX() >= x.xCord - x.RADIUS && e.getX() <= x.xCord)&& (e.getY() >= x.yCord - x.RADIUS&& e.getY() <= x.yCord)) {
+                if((mouseInBounds(e,x))) {
                     //if the mouse is clicked at the location of a node we mark it as currentNode and then redraw it in RED to indicate its chosen
                     isSelected = true;
                     currentNode = x;
@@ -102,7 +108,7 @@ public class Controller {
         GraphicsContext ctx = mainCanvas.getGraphicsContext2D();
         mainCanvas.setOnMouseClicked(e ->{
             for(Node x : Node.nodes){
-                if((e.getX() >= x.xCord - x.RADIUS && e.getX() <= x.xCord)&& (e.getY() >= x.yCord - x.RADIUS&& e.getY() <= x.yCord)){
+                if((mouseInBounds(e,x))){
                     start = x;
                     start_btn.setDisable(true);
                     x.reDraw(ctx,STARTCIRCLE);
@@ -117,7 +123,7 @@ public class Controller {
         GraphicsContext ctx = mainCanvas.getGraphicsContext2D();
         mainCanvas.setOnMouseClicked(e ->{
             for(Node x : Node.nodes){
-                if((e.getX() >= x.xCord - x.RADIUS && e.getX() <= x.xCord)&& (e.getY() >= x.yCord - x.RADIUS&& e.getY() <= x.yCord)){
+                if((mouseInBounds(e,x))){
                     end = x;
                     end_btn.setDisable(true);
                     x.reDraw(ctx,ENDCIRCLE);
